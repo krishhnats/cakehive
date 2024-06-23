@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container text-center mt-5 mb-5">
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<form id="payment-form">
+    <input type="hidden" id="rzp_order_id" value="{{ payment.id }}">
+    <input type="hidden" id="rzp_amount" value="{{ payment.amount }}">
+    <input type="hidden" name="shipping_address" value="{{ shipping_address }}">
+    <input type="hidden" name="phone" value="{{ phone }}">
+    <input type="hidden" id="rzp_key" value="{{ settings.RAZORPAY_KEY_ID }}">
+    <h3 class="text-center ">Complete your payment</h3>
+<button id="rzp-button" style="display: block;margin: 0 auto;padding: 12px 25px;color: #fff;background: #7db381;border: none;border-radius: 8px;box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">Pay with Razorpay</button></form>
+
+<script>
+document.getElementById('rzp-button').onclick = function(e){
+    e.preventDefault(); // Prevent form submission
+    var options = {
+        "key": "rzp_test_k8hqbIKPNoJj8s",
+        "amount": document.getElementById('rzp_amount').value,
+        "currency": "INR",
+        "name": "Cake Shop",
+        "description": "Test Transaction",
+         "image":"{% static 'images/img.png' %}",
+
+        "order_id": document.getElementById('rzp_order_id').value,
+        "handler": function (response){
+            // Send the response to the server
+            fetch("{% url 'cart:cartview' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify({
+                    "razorpay_payment_id": response.razorpay_payment_id,
+                    "razorpay_order_id": response.razorpay_order_id,
+                    "razorpay_signature": response.razorpay_signature
+                })
+            }).then(function(response) {
+                return response.text();
+            }).then(function(text) {
+                window.location.href = "{% url 'cart:razorpay_success' %}";
+            });
+        },
+        "theme": {
+            "color": "#F37254" // Optional: you can customize the theme color
+        }
+    };
+    console.log(options);
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+}
+
+</script>
+    </div>
+{% endblock %}
+

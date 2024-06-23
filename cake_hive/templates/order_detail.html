@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <h1>Order Details</h1>
+    <p><strong>Order ID:</strong> {{ order.id }}</p>
+    <p><strong>User:</strong> {{ order.user.username }}</p>
+    <p><strong>Order Date:</strong> {{ order.order_date }}</p>
+    <p><strong>Total Amount:</strong> {{ order.total_amount }}</p>
+    <p><strong>Shipping Address:</strong> {{ order.shipping_address }}</p>
+    <p><strong>Payment Method:</strong> {{ order.payment_method }}</p>
+    <p><strong>Contact Phone:</strong> {{ order.phone }}</p>
+    <p><strong>Order Status:</strong> {{ order.order_status }}</p>
+    <p><strong>Delivery Status:</strong> {{ order.delivery_status }}</p>
+    <h2>Ordered Items</h2>
+    <ul>
+        {% for item in order.items.all %}
+        <li>{{ item.cake.name }} - Quantity: {{ item.quantity }} - Subtotal: {{ item.subtotal }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

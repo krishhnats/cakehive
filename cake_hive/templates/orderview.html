@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container mt-4 mb-5">
+    {% if order %}
+        <h4 class="text-center mb-3">ORDERS</h4>
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {% for i in order %}
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <div class="row g-0">
+                            <div class="col-md-4 d-flex justify-content-center align-items-center p-3">
+                                <img src="{{ i.cake.image.url }}" class="img-fluid rounded-start" alt="{{ i.cake.name }}" style="max-width: 100%; height: auto;">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ i.cake.name }}</h5>
+                                     <p class="card-text">
+                                        Product price: {{ i.cake.price }}<br>
+                                        Phone number: {{ i.phone }}<br>
+                                        Delivery Address: {{ i.address }}<br>
+                                        No. of items: {{ i.no_of_items }}<br>
+                                        Payment Method: {{ i.payment_method }}<br>
+                                    </p>
+                                    <p class="card-text text-secondary"><small><strong>Ordered on:</strong> {{ i.order_date }}</small></p>
+                                    <p class="card-text text-secondary"><small class="fst-italic"><strong>Delivery status:</strong> {{ i.delivery_status }}</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="row justify-content-center">
+            <div class="col-md-6 text-center">
+                <h3>No orders placed</h3>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

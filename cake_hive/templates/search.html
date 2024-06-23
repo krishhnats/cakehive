@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid mb-2 mt-4">
+    <h2 class="text-center">You have searched for {{ q }}</h2>
+</div>
+
+<div class="container-fluid mb-2 mt-4">
+    <div class="row justify-content-center">
+        {% for cake in v %}
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-4">
+            <div class="card h-100 rounded-3">
+                <div style="height: 300px; overflow: hidden;">
+                    <img src="{{ cake.image.url }}" class="card-img-top img-fluid"  style="object-fit: cover; height: 100%;">
+                </div>
+                <div class="card-body text-center">
+                    <a class="btn btn-block" href="{% url 'cakes:details' cake.id %}">{{ cake.name }}</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col">
+            <h3 class="text-center">No results found</h3>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

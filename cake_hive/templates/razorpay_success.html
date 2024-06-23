@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}Payment Success{% endblock %}
+{% block content %}
+    <meta http-equiv="refresh" content="3;url={% url 'cart:success_page' %}"/>
+    <p>Redirecting...</p>
+
+{% endblock %}

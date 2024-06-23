@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-fluid mt-1" style="margin-bottom:100px">
+    <div class="row">
+        <h3 class="text-center text-light mb-4">Shopping Cart</h3>
+
+        {% if c %}
+        <div class="col-lg-7">
+            <table class="table table-bordered">
+                <tr class="table-dark">
+                    <th colspan="6">Cart Items</th>
+                </tr>
+                {% for i in c %}
+                <tr>
+                    <td class="align-middle"><img src="{{ i.cake.image.url }}" class="img-fluid" style="max-height: 200px;"></td>
+                    <td class="align-middle">{{ i.cake.name }}</td>
+                    <td class="align-middle">
+                        <b>Quantity: {{ i.quantity }}</b><br>
+                        <b>Unit Price: {{ i.quantity }} * {{ i.cake.price }}</b><br>
+                        <b>Delivery Date: {{ i.user_entry_date }}</b><br>
+                        {% if i.user_notes %}
+                            <b>Notes: {{ i.user_notes }}</b><br>
+                        {% endif %}
+                    </td>
+                    <td class="align-middle">Subtotal: {{ i.subtotal }}</td>
+                    <td class="align-middle">
+                        <form action="{% url 'cart:addtocart' i.cake.id %}" method="POST" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-light me-1">
+                                <i class="fas fa-plus-circle"></i>
+                            </button>
+                        </form>
+                        <a href="{% url 'cart:remove' i.cake.id %}" class="btn btn-light me-1"><i class="fas fa-minus-circle"></i></a>
+                        <a href="{% url 'cart:delete' i.cake.id %}" class="btn btn-light"><i class="fas fa-trash"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <div class="col-lg-5">
+            <table class="table table-bordered">
+                <tr class="table-dark">
+                    <th colspan="4">Check Out</th>
+                </tr>
+                <tr>
+                    <td colspan="4">TOTAL AMOUNT: {{ total }}</td>
+                </tr>
+            </table>
+            <a href="{% url 'cart:place_order' %}" class="btn btn-secondary">Place Order</a>
+            <a href="{% url 'cakes:allcat' %}" class="btn btn-secondary" style="position:absolute;right:0;">Continue Shopping</a>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-warning text-center" role="alert">
+    Your cart is empty.
+</div>
+            <div class="text-center">
+                <a href="{% url 'cakes:allcat' %}" class="btn btn-secondary">Continue Shopping</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
