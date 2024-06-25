@@ -32,9 +32,16 @@ class Orders(models.Model):
     notes = models.TextField(blank=True, null=True)
     user_entry_date = models.DateField(null=True, blank=True)
     paid=models.BooleanField(default=False)
+    is_delivered=models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        if self.is_delivered:
+            self.delivery_status = "delivered"
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.user.username
+
 
 
 
